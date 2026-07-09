@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Гілка: {{ thread.title }}</title>
+</head>
+<body>
+    <a href="{% url 'forum:thread_list' %}">← Назад до списку гілок</a>
+    <h1>{{ thread.title }}</h1>
+    <p>Створено: {{ thread.created_at|date:'Y-m-d H:i' }} | Автор: {{ thread.created_by.username }}</p>
+    {% if request.user.is_staff %}
+        <p>
+            <a href="{% url 'forum:thread_edit' thread.pk %}">Редагувати гілку</a> |
+            <a href="{% url 'forum:thread_delete' thread.pk %}">Видалити гілку</a>
+        </p>
+    {% endif %}
+    <h2>Повідомлення</h2>
+    {% if posts %}
+        <ol>
+            {% for post in posts %}
+                <li>
+                    <p>{{ post.body }}</p>
+                    <small>Автор: {{ post.author.username }} | {{ post.created_at|date:'Y-m-d H:i' }}</small>
+                </li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        <p>Поки що немає повідомлень у цій гілці.</p>
+    {% endif %}
+    <h2>Нове повідомлення</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div>
+            {{ form.body.label_tag }}<br>
+            {{ form.body }}
+            {{ form.body.errors }}
+        </div>
+        <button type="submit">Надіслати</button>
+    </form>
+</body>
+</html>
