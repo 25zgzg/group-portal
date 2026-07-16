@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.conf import settings
 
@@ -35,7 +36,7 @@ class Post(models.Model):
         related_name='posts',
         verbose_name="Автор"
     )
-    content = models.TextField(verbose_name="Текст повідомлення")
+    body = models.TextField(verbose_name="Текст повідомлення")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата відправки")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата редагування")
 

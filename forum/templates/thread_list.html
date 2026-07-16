@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Форум – Гілки</title>
+</head>
+<body>
+    <h1>Список гілок</h1>
+    <p>Ласкаво просимо, {{ request.user.username }}!</p>
+    {% if request.user.is_staff %}
+        <p><a href="{% url 'forum:thread_create' %}">Створити нову гілку</a></p>
+    {% endif %}
+    {% if threads %}
+        <ul>
+            {% for thread in threads %}
+                <li>
+                    <a href="{% url 'forum:thread_detail' thread.pk %}">{{ thread.title }}</a>
+                    <br>
+                    <small>Останнє оновлення: {{ thread.updated_at|date:'Y-m-d H:i' }} | Створив: {{ thread.created_by.username }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Поки що немає жодної гілки.</p>
+    {% endif %}
+</body>
+</html>
