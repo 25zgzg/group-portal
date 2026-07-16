@@ -85,7 +85,6 @@ def thread_detail(request, pk):
 
 
 @login_required
-@staff_required
 def thread_create(request):
     if request.method == 'POST':
         form = ThreadForm(request.POST)
@@ -122,15 +121,59 @@ def thread_edit(request, pk):
 
 
 @login_required
-@staff_required
 def thread_delete(request, pk):
     thread = get_object_or_404(Thread, pk=pk)
+    # Користувач може видалити тільки свою гілку або якщо це staff
+    if thread.created_by != request.user and not request.user.is_staff:
+        return redirect(reverse('forum:thread_detail', args=[thread.pk]))
+    
     if request.method == 'POST':
         thread.delete()
         return redirect(reverse('forum:thread_list'))
-    return render(request, 'thread_form.html', {
-        'form': None,
-        'title': 'Видалити гілку',
+    return render(request, 'thread_delete.html', {
         'thread': thread,
-        'delete_confirmation': True,
+    })
+
+
+@login_required
+def post_edit(request, thread_pk, post_pk):
+    thread = get_object_or_404(Thread, pk=thread_pk)
+    post = get_object_or_404(Post, pk=post_pk, thread=thread)
+    
+    # Користувач може редагувати тільки свій пост або якщо це staff
+    if post.author != request.user and not request.user.is_staff:
+        return redirect(reverse('forum:thread_detail', args=[thread.pk]))
+    
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('forum:thread_detail', args=[thread.pk]))
+    else:
+        form = PostForm(instance=post)
+    
+    return render(request, 'post_form.html', {
+        'form': form,
+        'thread': thread,
+        'post': post,
+        'title': 'Редагувати повідомлення',
+    })
+
+
+@login_required
+def post_delete(request, thread_pk, post_pk):
+    thread = get_object_or_404(Thread, pk=thread_pk)
+    post = get_object_or_404(Post, pk=post_pk, thread=thread)
+    
+    # Користувач може видалити тільки свій пост або якщо це staff
+    if post.author != request.user and not request.user.is_staff:
+        return redirect(reverse('forum:thread_detail', args=[thread.pk]))
+    
+    if request.method == 'POST':
+        post.delete()
+        return redirect(reverse('forum:thread_detail', args=[thread.pk]))
+    
+    return render(request, 'post_delete.html', {
+        'thread': thread,
+        'post': post,
     })
