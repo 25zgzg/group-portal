@@ -5,9 +5,9 @@ from .models import Post, Thread
 
 @admin.register(Thread)
 class ThreadAdmin(admin.ModelAdmin):
-    list_display = ('title', 'created_by', 'created_at', 'updated_at')
-    search_fields = ('title', 'created_by__username')
-    list_filter = ('created_at', 'updated_at')
+    list_display = ('title', 'creator', 'created_at')
+    search_fields = ('title', 'creator__username')
+    list_filter = ('created_at',)
 
 
 @admin.register(Post)

@@ -14,7 +14,7 @@ class User(AbstractUser):
         verbose_name="Роль"
     )
 
-    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, verbose_name="Аватарка")
+    avatar = models.FileField(upload_to='avatars/', blank=True, null=True, verbose_name="Аватарка")
     bio = models.TextField(max_length=500, blank=True, verbose_name="Про себе")
 
     def is_moderator(self):

@@ -1,15 +1,14 @@
 from django.conf import settings
 from django.db import models
-from django.conf import settings
 
 class Thread(models.Model):
     title = models.CharField(max_length=200, verbose_name="Назва теми")
-    description = models.TextField(blank=True, verbose_name="Опис теми")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата створення")
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
         related_name='threads',
+        db_column='created_by_id',
         verbose_name="Автор"
     )
 

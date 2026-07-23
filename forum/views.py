@@ -90,7 +90,7 @@ def thread_create(request):
         form = ThreadForm(request.POST)
         if form.is_valid():
             thread = form.save(commit=False)
-            thread.created_by = request.user
+            thread.creator = request.user
             thread.save()
             return redirect(reverse('forum:thread_detail', args=[thread.pk]))
     else:
@@ -124,7 +124,7 @@ def thread_edit(request, pk):
 def thread_delete(request, pk):
     thread = get_object_or_404(Thread, pk=pk)
     # Користувач може видалити тільки свою гілку або якщо це staff
-    if thread.created_by != request.user and not request.user.is_staff:
+    if thread.creator != request.user and not request.user.is_staff:
         return redirect(reverse('forum:thread_detail', args=[thread.pk]))
     
     if request.method == 'POST':

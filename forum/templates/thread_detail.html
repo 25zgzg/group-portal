@@ -9,10 +9,10 @@
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #fff4f3;
         }
         .back-link {
-            color: #007bff;
+            color: #a76562;
             text-decoration: none;
             margin-bottom: 20px;
             display: inline-block;
@@ -42,11 +42,11 @@
             display: inline-block;
         }
         .btn-edit {
-            background-color: #28a745;
-            color: white;
+            background-color: #e8b4b2;
+            color: #3f2928;
         }
         .btn-edit:hover {
-            background-color: #218838;
+            background-color: #c98986;
         }
         .btn-delete {
             background-color: #dc3545;
@@ -65,7 +65,7 @@
             padding: 15px;
             margin-bottom: 15px;
             background-color: #f9f9f9;
-            border-left: 3px solid #007bff;
+            border-left: 3px solid #e8b4b2;
             border-radius: 4px;
         }
         .post-meta {
@@ -86,11 +86,11 @@
             display: inline-block;
         }
         .btn-edit {
-            background-color: #28a745;
-            color: white;
+            background-color: #e8b4b2;
+            color: #3f2928;
         }
         .btn-edit:hover {
-            background-color: #218838;
+            background-color: #c98986;
         }
         .btn-delete {
             background-color: #dc3545;
@@ -114,8 +114,8 @@
             box-sizing: border-box;
         }
         button {
-            background-color: #007bff;
-            color: white;
+            background-color: #e8b4b2;
+            color: #3f2928;
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
@@ -124,7 +124,7 @@
             margin-top: 10px;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #c98986;
         }
         .empty {
             text-align: center;
@@ -139,10 +139,10 @@
     <h1>{{ thread.title }}</h1>
     
     <div class="thread-meta">
-        <strong>Автор:</strong> {{ thread.created_by.username }}<br>
+        <strong>Автор:</strong> {{ thread.creator.username }}<br>
         <strong>Створено:</strong> {{ thread.created_at|date:'d.m.Y H:i' }}
         
-        {% if request.user == thread.created_by or request.user.is_staff %}
+        {% if request.user == thread.creator or request.user.is_staff %}
             <div class="thread-actions">
                 <a href="{% url 'forum:thread_edit' thread.pk %}" class="btn btn-edit">✏️ Редагувати</a>
                 <a href="{% url 'forum:thread_delete' thread.pk %}" class="btn btn-delete">🗑️ Видалити</a>
