@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 
 class LoginForm(AuthenticationForm):
     error_messages = {
-        **AuthenticationForm.error_messages,
         'invalid_login': 'Акаунт не знайдено або введено неправильний пароль.',
     }
 
