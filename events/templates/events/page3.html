@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сторінка 3 — Мій Django Проєкт</title>
+    <link rel="stylesheet" href="{% static 'events/style3.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">DjangoApp</a>
+        <ul class="navbar-nav">
+            <li><a class="nav-link" href="/forum/">Головна сторінка</a></li>
+            <li><a class="nav-link" href="/page1/">Сторінка 1</a></li>
+            <li><a class="nav-link" href="/page2/">Сторінка 2</a></li>
+            <li><a class="nav-link active" href="/page3/">Сторінка 3</a></li>
+            <li><a class="nav-link btn-login" href="/accounts/login/">Увійти</a></li>
+            <li><a class="nav-link btn-register" href="/accounts/register/">Зареєструватися</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <div class="main-card">
+            <h1>Сторінка 3!</h1>
+            <p class="lead">Ви успішно зв'язали три сторінки в єдину стильну екосистему за допомогою роздільного HTML та CSS.</p>
+            <hr>
+            <p class="text-muted">Цю сторінку часто використовують як розділ "Контакти", форму зворотного зв'язку або фінальну дію користувача.</p>
+            <a class="btn" href="/page1/">Повернутися на початок ↑</a>
+        </div>
+
+        <div class="grid">
+            <div class="sub-card">
+                <h3>Зворотний зв'язок</h3>
+                <p>Технічна підтримка користувачів вашого Django-додатка, адреси та робочі години.</p>
+            </div>
+            <div class="sub-card">
+                <h3>Налаштування профілю</h3>
+                <p>Керування конфіденційністю, зміна паролів та персоналізація інтерфейсу під клієнта.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Мій Django Проєкт. Всі права захищені.</p>
+    </footer>
+
+</body>
+</html>

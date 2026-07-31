@@ -16,6 +16,7 @@ class ProfileView(APIView):
             "email": request.user.email,
         })
 
+
 class LoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
@@ -28,6 +29,10 @@ class LoginView(TokenObtainPairView):
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
+<<<<<<< HEAD
         return response
 
 
+=======
+        return response
+>>>>>>> 9252d2e2541eddd7772fa14580e417d85b75034c

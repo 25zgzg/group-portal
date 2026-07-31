@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+{% load static %}
+>>>>>>> 9252d2e2541eddd7772fa14580e417d85b75034c
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -9,7 +13,11 @@
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
+<<<<<<< HEAD
             background-color: #fff4f3;
+=======
+            background-color: #f5f5f5;
+>>>>>>> 9252d2e2541eddd7772fa14580e417d85b75034c
         }
         h1 {
             color: #333;
@@ -27,15 +35,41 @@
             color: #666;
         }
         .btn {
+<<<<<<< HEAD
             background-color: #e8b4b2;
             color: #3f2928;
+=======
+            background-color: #007bff;
+            color: white;
+>>>>>>> 9252d2e2541eddd7772fa14580e417d85b75034c
             padding: 10px 20px;
             text-decoration: none;
             border-radius: 4px;
             display: inline-block;
         }
         .btn:hover {
+<<<<<<< HEAD
             background-color: #c98986;
+=======
+            background-color: #0056b3;
+        }
+        .pages-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .pages-nav a {
+            background-color: #ec4899;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .pages-nav a:hover {
+            background-color: #db2777;
+>>>>>>> 9252d2e2541eddd7772fa14580e417d85b75034c
         }
         .thread-list {
             list-style: none;
@@ -54,7 +88,11 @@
             margin-bottom: 5px;
         }
         .thread-title a {
+<<<<<<< HEAD
             color: #a76562;
+=======
+            color: #007bff;
+>>>>>>> 9252d2e2541eddd7772fa14580e417d85b75034c
             text-decoration: none;
         }
         .thread-title a:hover {
@@ -71,9 +109,26 @@
             border-radius: 4px;
             color: #666;
         }
+<<<<<<< HEAD
     </style>
 </head>
 <body>
+=======
+        .forum-banner {
+            display: block;
+            max-width: 100%;
+            max-height: 300px;
+            width: auto;
+            height: auto;
+            margin: 0 auto 20px auto;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <img src="{% static 'forum/images.jpg' %}" alt="Форум" class="forum-banner">
+
+>>>>>>> 9252d2e2541eddd7772fa14580e417d85b75034c
     <div class="header">
         <div>
             <h1>Форум</h1>
@@ -82,6 +137,15 @@
         <a href="{% url 'forum:thread_create' %}" class="btn">+ Створити нову гілку</a>
     </div>
 
+<<<<<<< HEAD
+=======
+    <div class="pages-nav">
+        <a href="/page1/">Сторінка 1</a>
+        <a href="/page2/">Сторінка 2</a>
+        <a href="/page3/">Сторінка 3</a>
+    </div>
+
+>>>>>>> 9252d2e2541eddd7772fa14580e417d85b75034c
     {% if threads %}
         <ul class="thread-list">
             {% for thread in threads %}
@@ -90,8 +154,13 @@
                         <a href="{% url 'forum:thread_detail' thread.pk %}">{{ thread.title }}</a>
                     </div>
                     <div class="thread-meta">
+<<<<<<< HEAD
                         Створено: {{ thread.created_at|date:'d.m.Y H:i' }} |
                         Створив: <strong>{{ thread.creator.username }}</strong>
+=======
+                        Створено: {{ thread.created_at|date:'d.m.Y H:i' }} | 
+                        Автор: <strong>{{ thread.creator.username }}</strong>
+>>>>>>> 9252d2e2541eddd7772fa14580e417d85b75034c
                     </div>
                 </li>
             {% endfor %}
@@ -103,5 +172,9 @@
         </div>
     {% endif %}
 </body>
+<<<<<<< HEAD
 </html>
 
+=======
+</html>
+>>>>>>> 9252d2e2541eddd7772fa14580e417d85b75034c

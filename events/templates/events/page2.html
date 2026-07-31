@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сторінка 2 — Мій Django Проєкт</title>
+    <link rel="stylesheet" href="{% static 'events/style2.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">DjangoApp</a>
+        <ul class="navbar-nav">
+            <li><a class="nav-link" href="/forum/">Головна сторінка</a></li>
+            <li><a class="nav-link" href="/page1/">Сторінка 1</a></li>
+            <li><a class="nav-link active" href="/page2/">Сторінка 2</a></li>
+            <li><a class="nav-link" href="/page3/">Сторінка 3</a></li>
+            <li><a class="nav-link btn-login" href="/accounts/login/">Увійти</a></li>
+            <li><a class="nav-link btn-register" href="/accounts/register/">Зареєструватися</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <div class="main-card">
+            <h1>Ласкаво просимо на Сторінку 2!</h1>
+            <p class="lead">Зверніть увагу, як у меню автоматично підсвітилася кнопка "Сторінка 2" завдяки класу active.</p>
+            <hr>
+            <p class="text-muted">Тут контент може відрізнятися. Зазвичай на другій сторінці розробники розміщують детальні описи, галереї або аналітику.</p>
+            <a class="btn" href="/page3/">Перейти на Сторінку 3 →</a>
+        </div>
+
+        <div class="grid">
+            <div class="sub-card">
+                <h3>Панель статистики</h3>
+                <p>Тут ви зможете збирати графіки, таблиці користувачів або лічильники відвідувань сайту.</p>
+            </div>
+            <div class="sub-card">
+                <h3>Завантаження звітів</h3>
+                <p>Кнопки для експорту даних в Excel, PDF чи інші зручні для вас формати.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Мій Django Проєкт. Всі права захищені.</p>
+    </footer>
+
+</body>
+</html>

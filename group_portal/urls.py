@@ -23,7 +23,14 @@ from django.urls import include
 urlpatterns = [
     path('', RedirectView.as_view(url='/forum/', permanent=False)),
     path('admin/', admin.site.urls),
+<<<<<<< HEAD
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')), # For password reset, etc.
     path('forum/', include('forum.urls', namespace='forum')),
+=======
+    path("api/auth/", include("accounts.urls")),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('forum/', include('forum.urls', namespace='forum')),
+    path('', include('events.urls')),
+>>>>>>> 9252d2e2541eddd7772fa14580e417d85b75034c
 ]

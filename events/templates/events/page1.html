@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сторінка 1 — Мій Django Проєкт</title>
+    <link rel="stylesheet" href="{% static 'events/style1.css' %}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">DjangoApp</a>
+        <ul class="navbar-nav">
+            <li><a class="nav-link" href="/forum/">Головна сторінка</a></li>
+            <li><a class="nav-link active" href="/page1/">Сторінка 1</a></li>
+            <li><a class="nav-link" href="/page2/">Сторінка 2</a></li>
+            <li><a class="nav-link" href="/page3/">Сторінка 3</a></li>
+            <li><a class="nav-link btn-login" href="/accounts/login/">Увійти</a></li>
+            <li><a class="nav-link btn-register" href="/accounts/register/">Зареєструватися</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <div class="main-card">
+            <h1>Вітаємо на Сторінці 1!</h1>
+            <p class="lead">Це перша сторінка вашого додатка. Вона використовує сучасну структуру блоків та чисті відступи.</p>
+            <hr>
+            <p class="text-muted">Ви перебуваєте у додатку <code>events</code>. Сюди можна виводити списки новин, подій або текстові блоки з бази даних.</p>
+            <a class="btn" href="/page2/">Перейти на Сторінку 2 →</a>
+        </div>
+
+        <div class="grid">
+            <div class="sub-card">
+                <h3>Компонент А</h3>
+                <p>Додатковий блок для першої сторінки. Тут можна розмістити віджети або корисні посилання.</p>
+            </div>
+            <div class="sub-card">
+                <h3>Компонент Б</h3>
+                <p>Ще один блок для балансу дизайну вашого користувацького інтерфейсу.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Мій Django Проєкт. Всі права захищені.</p>
+    </footer>
+
+</body>
+</html>
