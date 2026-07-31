@@ -1,11 +1,12 @@
 from django.contrib.auth.models import AbstractUser
-from django.db import models 
+from django.db import models
 
 class User(AbstractUser):
     class Roles(models.TextChoices):
         STUDENT = 'student', 'Учень'
         MODERATOR = 'moderator', 'Модератор'
         ADMIN =  'admin', 'Адміністратор'
+    email = models.EmailField(unique=True)
 
     role = models.CharField(
         max_length=20,
@@ -13,9 +14,11 @@ class User(AbstractUser):
         default=Roles.STUDENT,
         verbose_name="Роль"
     )
-
     avatar = models.FileField(upload_to='avatars/', blank=True, null=True, verbose_name="Аватарка")
     bio = models.TextField(max_length=500, blank=True, verbose_name="Про себе")
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
 
     def is_moderator(self):
         return self.role == self.Roles.MODERATOR or self.is_staff
@@ -28,4 +31,4 @@ class User(AbstractUser):
         verbose_name_plural = "Користувачі"
 
     def __str__(self):
-        return f"{self.username} ({self.get_role_display()})"
+        return self.email if self.email else self.username
