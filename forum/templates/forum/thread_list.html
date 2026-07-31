@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Форум — Портал Групи{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1 class="hero__title">Форум групи</h1>
+    <p class="hero__text">Обговорюйте навчальні питання, створюйте гілки та діліться думками з іншими студентами.</p>
+    <a href="{% url 'forum:thread_create' %}" class="btn">Створити</a>
+</div>
+
+<div class="modules-grid">
+    {% for thread in threads %}
+    <div class="card">
+        <div>
+            <h3 class="card__title">{{ thread.title }}</h3>
+            <p class="card__text">Автор: <strong>{{ thread.creator.username }}</strong><br>Створено: {{ thread.created_at|date:"d.m.Y H:i" }}</p>
+        </div>
+        <a href="{% url 'forum:thread_detail' thread.pk %}" class="btn btn--outline" style="align-self: flex-start;">Перейти до теми</a>
+    </div>
+    {% empty %}
+    <div class="card">
+        <p class="card__text">Наразі тем на форумі немає. Будьте першими, хто створить нову обговорення!</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

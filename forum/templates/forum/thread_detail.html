@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ thread.title }} — Форум{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1 class="hero__title">{{ thread.title }}</h1>
+    <p class="hero__text">Автор: <strong>{{ thread.creator.username }}</strong> | Створено: {{ thread.created_at|date:"d.m.Y H:i" }}</p>
+    <a href="{% url 'forum:thread_list' %}" class="btn btn--outline" style="margin-top: 1rem;">← Назад до тем</a>
+</div>
+
+<div class="card">
+    <h2 class="card__title" style="font-size: 1.1rem; margin-bottom: 1rem;">Повідомлення та гілка обговорення</h2>
+    
+    {% for post in thread.posts.all %}
+    <div class="post-wrapper" style="background: var(--bg-color); padding: 1.25rem; border-radius: var(--border-radius-sm); margin-bottom: 1rem; border: 1px solid var(--card-border);">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+            <span><strong>{{ post.author.username }}</strong></span>
+            <span>{{ post.created_at|date:"d.m.Y H:i" }}</span>
+        </div>
+        <p class="card__text">{{ post.content }}</p>
+        
+        <!-- Зображення: головне та мініатюри -->
+        {% if post.images.all %}
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem;">
+            {% for img in post.images.all %}
+                {% if img.is_main %}
+                    <img src="{{ img.image.url }}" style="max-width: 300px; width: 100%; border-radius: var(--border-radius-sm); border: 2px solid var(--primary-color);">
+                {% else %}
+                    <img src="{{ img.image.url }}" style="max-width: 100px; width: 100px; height: 100px; object-fit: cover; border-radius: var(--border-radius-sm); opacity: 0.8;">
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div style="display: flex; gap: 10px; align-items: center; margin-top: 1rem;">
+            <!-- Лайки / Дизлайки -->
+            <form action="{% url 'forum:vote_post' post.pk %}" method="post" class="vote-form" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="value" value="1">
+                <button type="submit" class="btn btn--outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">👍 Лайк (<span class="likes-count">{{ post.likes_count }}</span>)</button>
+            </form>
+            <form action="{% url 'forum:vote_post' post.pk %}" method="post" class="vote-form" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="value" value="-1">
+                <button type="submit" class="btn btn--outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">👎 Дизлайк (<span class="dislikes-count">{{ post.dislikes_count }}</span>)</button>
+            </form>
+
+            <!-- Кнопка підписки на автора -->
+            {% if user.is_authenticated and user != post.author %}
+            <a href="{% url 'forum:toggle_follow' post.author.pk %}" class="btn btn--outline" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; margin-left: auto;">
+                Слідкувати за автором
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <p class="card__text">У цій темі поки немає повідомлень.</p>
+    {% endfor %}
+</div>
+
+{% if user.is_authenticated %}
+<div class="card" style="margin-top: 2rem;">
+    <h3 class="card__title">Написати відповідь</h3>
+    <form method="post" action="{% url 'forum:post_create' thread.pk %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% for field in post_form %}
+            <div style="margin-bottom: 1rem;">
+                <label for="{{ field.id_for_label }}" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div style="color: #ff5252; margin-top: 0.25rem; font-size: 0.85rem;">{{ field.errors.0 }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <button type="submit" class="btn">Надіслати відповідь</button>
+    </form>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('.vote-form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const parent = this.closest('.post-wrapper');
+            parent.querySelector('.likes-count').textContent = data.likes_count;
+            parent.querySelector('.dislikes-count').textContent = data.dislikes_count;
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+</script>
+{% endblock %}

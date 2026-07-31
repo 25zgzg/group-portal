@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ announcement.title }} — Оголошення{% endblock %}
+
+{% block content %}
+<div class="card" style="margin-bottom: 2rem;">
+    <h1 class="card__title" style="font-size: 1.8rem; margin-bottom: 1rem;">{{ announcement.title }}</h1>
+    <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+        Автор: <strong>{{ announcement.author.username }}</strong> | {{ announcement.created_at|date:"d.m.Y H:i" }}
+    </div>
+    <div class="card__text" style="font-size: 1.05rem; line-height: 1.7; white-space: pre-wrap; margin-bottom: 2rem;">
+        {{ announcement.content }}
+    </div>
+
+    <!-- Лайки та дизлайки -->
+    <div style="display: flex; gap: 1rem; align-items: center; border-top: 1px solid var(--card-border); pt: 1.5rem; padding-top: 1rem;">
+        {% if user.is_authenticated %}
+            <a href="{% url 'announcements:vote' announcement.pk 1 %}" class="btn {% if user_vote != 1 %}btn--outline{% endif %}" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                👍 Лайк ({{ likes_count }})
+            </a>
+            <a href="{% url 'announcements:vote' announcement.pk -1 %}" class="btn {% if user_vote != -1 %}btn--outline{% endif %}" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                👎 Дизлайк ({{ dislikes_count }})
+            </a>
+        {% else %}
+            <span style="color: var(--text-secondary);">Увійдіть, щоб голосувати (👍 {{ likes_count }} | 👎 {{ dislikes_count }})</span>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Обговорення (Коментарі) -->
+<div class="card">
+    <h3 class="card__title" style="margin-bottom: 1.5rem;">Обговорення ({{ comments.count }})</h3>
+
+    {% if user.is_authenticated %}
+        <form method="post" action="{% url 'announcements:add_comment' announcement.pk %}" style="margin-bottom: 2rem;">
+            {% csrf_token %}
+            <div style="margin-bottom: 1rem;">
+                {{ comment_form.content }}
+            </div>
+            <button type="submit" class="btn">Надіслати коментар</button>
+        </form>
+    {% else %}
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+            Будь ласка, <a href="{% url 'accounts:login' %}" style="color: var(--primary-color);">увійдіть</a>, щоб залишити коментар.
+        </p>
+    {% endif %}
+
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        {% for comment in comments %}
+            <div style="background-color: var(--bg-color); padding: 1rem 1.25rem; border-radius: var(--border-radius-sm); border: 1px solid var(--card-border);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+                    <strong>{{ comment.author.username }}</strong>
+                    <span>{{ comment.created_at|date:"d.m.Y H:i" }}</span>
+                </div>
+                <p style="margin: 0; color: var(--text-color); line-height: 1.5;">{{ comment.content }}</p>
+            </div>
+        {% empty %}
+            <p style="color: var(--text-secondary);">Ще немає коментарів. Будьте першим!</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div style="margin-top: 2rem;">
+    <a href="{% url 'announcements:announcement_list' %}" class="btn btn--outline">← Назад до оголошень</a>
+</div>
+
+<style>
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: var(--border-radius-sm);
+        border: 1px solid var(--card-border);
+        background-color: var(--card-bg);
+        color: var(--text-color);
+        font-family: inherit;
+        font-size: 0.95rem;
+        box-sizing: border-box;
+        resize: vertical;
+    }
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,278 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Портал Групи{% endblock %}</title>
+    <style>
+        :root {
+            --bg-color: #f0f4f9;
+            --card-bg: #ffffff;
+            --primary-color: #1a73e8;
+            --primary-hover: #1557b0;
+            --accent-color: #e8f0fe;
+            --text-color: #1f1f1f;
+            --text-secondary: #5e5e5e;
+            --border-radius: 24px;
+            --border-radius-sm: 12px;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --hero-gradient: linear-gradient(135deg, #e8f0fe 0%, #ffffff 100%);
+            --hero-title: #1f1f1f;
+            --card-border: rgba(0, 0, 0, 0.04);
+            --btn-text: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #8ab4f8;
+            --primary-hover: #aecbfa;
+            --accent-color: #2d3748;
+            --text-color: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.6);
+            --hero-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            --hero-title: #f8fafc;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --btn-text: #121212;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .header {
+            background: var(--card-bg);
+            padding: 1rem 3rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--card-border);
+            transition: var(--transition);
+        }
+
+        .header__logo {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header__nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header__nav-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .header__nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
+        }
+
+        .header__nav-link:hover {
+            color: var(--primary-color);
+            background-color: var(--accent-color);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background: var(--accent-color);
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--border-radius-sm);
+            font-size: 1rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .hero {
+            background: var(--hero-gradient);
+            border-radius: var(--border-radius);
+            padding: 3rem 2.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+        }
+
+        .hero__title {
+            margin-top: 0;
+            font-size: 2.5rem;
+            font-weight: 500;
+            color: var(--hero-title);
+            letter-spacing: -0.5px;
+        }
+
+        .hero__text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 700px;
+            margin-bottom: 2rem;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--card-border);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(138, 180, 248, 0.3);
+        }
+
+        .card__title {
+            margin-top: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--hero-title);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card__text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: var(--btn-text);
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem 1.75rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.2);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            box-shadow: 0 6px 16px rgba(26, 115, 232, 0.4);
+        }
+
+        .btn--outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            box-shadow: none;
+        }
+
+        .btn--outline:hover {
+            background-color: var(--accent-color);
+            box-shadow: none;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="header__logo">Портал Групи</a>
+        <div class="header__nav">
+            <nav>
+                <ul class="header__nav-list">
+                    <li><a href="/" class="header__nav-link">Головна</a></li>
+                    {% if user.is_authenticated %}
+                        <li><span class="header__nav-link" style="color: var(--primary-color);">{{ user.username }}</span></li>
+                    {% else %}
+                        <li><a href="{% url 'accounts:login' %}" class="header__nav-link" style="padding: 0.35rem 0.85rem; font-size: 0.9rem; background-color: var(--primary-color); color: var(--btn-text); border-radius: var(--border-radius-sm);">Увійти</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="themeToggle" title="Змінити тему">🌙</button>
+        </div>
+    </header>
+    
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        // Перевіряємо збережену тему в localStorage
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        htmlElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

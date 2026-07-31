@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Створити нову тему — Форум{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1 class="hero__title">Створити нову тему</h1>
+    <p class="hero__text">Почніть нове обговорення для своєї групи.</p>
+</div>
+
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <form method="post">
+        {% csrf_token %}
+        <div style="margin-bottom: 1.5rem;">
+            <label for="{{ form.title.id_for_label }}" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Назва теми</label>
+            {{ form.title }}
+            {{ form.title.errors }}
+        </div>
+        <button type="submit" class="btn">Створити тему</button>
+        <a href="{% url 'forum:thread_list' %}" class="btn btn--outline" style="margin-left: 1rem;">Скасувати</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Головна — Портал Групи{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1 class="hero__title">Портал нашої групи</h1>
+    <p class="hero__text">Сучасний простір для комунікації, навчання та організації подій. Усі новинні оголошення, форум, щоденник та матеріали в одному інтуїтивному інтерфейсі.</p>
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="/api/auth/profile/" class="btn">Мій профіль</a>
+        <a href="/api/" class="btn btn--outline">API Документація</a>
+    </div>
+</section>
+
+<div class="modules-grid">
+    <div class="card">
+        <div>
+            <h2 class="card__title">💬 Форум</h2>
+            <p class="card__text">Обговорюйте навчальні питання, створюйте гілки та діліться думками з іншими студентами.</p>
+        </div>
+        <a href="{% url 'forum:thread_list' %}" class="btn btn--outline" style="align-self: flex-start;">Перейти</a>
+    </div>
+
+    <div class="card">
+        <div>
+            <h2 class="card__title">📢 Оголошення</h2>
+            <p class="card__text">Актуальна інформація від старости, модераторів та викладачів групи.</p>
+        </div>
+        <a href="{% url 'announcements:announcement_list' %}" class="btn btn--outline" style="align-self: flex-start;">Перейти</a>
+    </div>
+
+    <div class="card">
+        <div>
+            <h2 class="card__title">📚 Матеріали</h2>
+            <p class="card__text">Корисні посилання, лекції, файли та відео-матеріали для навчання.</p>
+        </div>
+        <a href="#" class="btn btn--outline" style="align-self: flex-start;">Перейти</a>
+    </div>
+</div>
+{% endblock %}

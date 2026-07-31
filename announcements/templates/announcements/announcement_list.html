@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Оголошення — Портал Групи{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1 class="hero__title">Оголошення</h1>
+    <p class="hero__text">Слідкуйте за найважливішими новинами від адміністрації та викладачів.</p>
+</div>
+
+<div class="modules-grid">
+    {% for ann in announcements %}
+    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <a href="{% url 'announcements:announcement_detail' ann.pk %}" style="text-decoration: none; color: inherit;">
+                <h3 class="card__title">{{ ann.title }}</h3>
+                <p class="card__text">{{ ann.content|truncatewords:25 }}</p>
+            </a>
+        </div>
+        <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-secondary); border-top: 1px solid var(--card-border); padding-top: 0.75rem;">
+            <span>{{ ann.created_at|date:"d.m.Y H:i" }}</span>
+            <span>👍 {{ ann.likes_count }} | 👎 {{ ann.dislikes_count }} | 💬 {{ ann.comments_count }}</span>
+        </div>
+    </div>
+    {% empty %}
+    <div class="card">
+        <p class="card__text">Поки немає жодних оголошень.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

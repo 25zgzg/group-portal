@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Увійти — Портал Групи{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 400px; margin-top: 5rem;">
+    <div class="card">
+        <h1 class="card__title" style="margin-bottom: 1.5rem; justify-content: center;">Увійти</h1>
+        
+        <form method="post">
+            {% csrf_token %}
+            {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
+            
+            {% if form.non_field_errors %}
+                <div style="color: #ff5252; margin-bottom: 1rem; font-size: 0.9rem;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            
+            <div style="margin-bottom: 1rem;">
+                <label for="{{ form.username.id_for_label }}" style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Email</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div style="color: #ff5252; margin-top: 0.5rem; font-size: 0.85rem;">{{ form.username.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="{{ form.password.id_for_label }}" style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">Пароль</label>
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <div style="color: #ff5252; margin-top: 0.5rem; font-size: 0.85rem;">{{ form.password.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="btn" style="width: 100%;">Увійти</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <span style="color: var(--text-secondary); font-size: 0.9rem;">Ще не маєте акаунта?</span>
+            <a href="{% url 'accounts:register' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" style="color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 0.9rem; margin-left: 0.5rem;">Зареєструватися</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    input[type="text"], input[type="email"], input[type="password"] {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: var(--border-radius-sm);
+        border: 1px solid var(--card-border);
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-family: inherit;
+        font-size: 0.95rem;
+        box-sizing: border-box;
+    }
+    input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
+</style>
+{% endblock %}

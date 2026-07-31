@@ -1,0 +1,179 @@
+:root {
+    --bg-color: #f0f4f9; /* Pixel style soft light blue-gray background */
+    --card-bg: #ffffff;
+    --primary-color: #1a73e8; /* Google Blue */
+    --primary-hover: #1557b0;
+    --accent-color: #e8f0fe;
+    --text-color: #1f1f1f;
+    --text-secondary: #5e5e5e;
+    --border-radius: 24px; /* Material You pill/card roundness */
+    --border-radius-sm: 12px;
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Header */
+.header {
+    background: var(--card-bg);
+    padding: 1rem 3rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.header__logo {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.header__nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.header__nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition);
+}
+
+.header__nav-link:hover {
+    color: var(--primary-color);
+    background-color: var(--accent-color);
+}
+
+/* Container */
+.container {
+    max-width: 1000px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+
+/* Hero Section / Cards (Pixel Style) */
+.hero {
+    background: linear-gradient(135deg, #e8f0fe 0%, #ffffff 100%);
+    border-radius: var(--border-radius);
+    padding: 3rem 2.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    border: 1px solid rgba(26, 115, 232, 0.1);
+}
+
+.hero__title {
+    margin-top: 0;
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: var(--text-color);
+    letter-spacing: -0.5px;
+}
+
+.hero__text {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 700px;
+    margin-bottom: 2rem;
+}
+
+/* Grid for Widgets / Modules */
+.modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.card__title {
+    margin-top: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.card__text {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+
+/* Buttons */
+.btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50px; /* Material pill button */
+    padding: 0.75rem 1.75rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(26, 115, 232, 0.2);
+}
+
+.btn:hover {
+    background-color: var(--primary-hover);
+    box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
+}
+
+.btn--outline {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    box-shadow: none;
+}
+
+.btn--outline:hover {
+    background-color: var(--accent-color);
+    box-shadow: none;
+}
