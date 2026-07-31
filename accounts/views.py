@@ -15,6 +15,7 @@ class ProfileView(APIView):
             "email": request.user.email,
         })
 
+
 class LoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
@@ -28,4 +29,3 @@ class LoginView(TokenObtainPairView):
             )
 
         return response
-

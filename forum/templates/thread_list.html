@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Форум – Гілки</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .user-info {
+            color: #666;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .pages-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .pages-nav a {
+            background-color: #ec4899;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .pages-nav a:hover {
+            background-color: #db2777;
+        }
+        .thread-list {
+            list-style: none;
+            padding: 0;
+        }
+        .thread-item {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .thread-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .thread-title a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .thread-title a:hover {
+            text-decoration: underline;
+        }
+        .thread-meta {
+            color: #666;
+            font-size: 14px;
+        }
+        .empty {
+            background-color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 4px;
+            color: #666;
+        }
+        .forum-banner {
+            display: block;
+            max-width: 100%;
+            max-height: 300px;
+            width: auto;
+            height: auto;
+            margin: 0 auto 20px auto;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <img src="{% static 'forum/images.jpg' %}" alt="Форум" class="forum-banner">
+
+    <div class="header">
+        <div>
+            <h1>Форум</h1>
+            <div class="user-info">Ласкаво просимо, <strong>{{ request.user.username }}</strong>!</div>
+        </div>
+        <a href="{% url 'forum:thread_create' %}" class="btn">+ Створити нову гілку</a>
+    </div>
+
+    <div class="pages-nav">
+        <a href="/page1/">Сторінка 1</a>
+        <a href="/page2/">Сторінка 2</a>
+        <a href="/page3/">Сторінка 3</a>
+    </div>
+
+    {% if threads %}
+        <ul class="thread-list">
+            {% for thread in threads %}
+                <li class="thread-item">
+                    <div class="thread-title">
+                        <a href="{% url 'forum:thread_detail' thread.pk %}">{{ thread.title }}</a>
+                    </div>
+                    <div class="thread-meta">
+                        Створено: {{ thread.created_at|date:'d.m.Y H:i' }} | 
+                        Автор: <strong>{{ thread.creator.username }}</strong>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="empty">
+            <p>Поки що немає жодної гілки.</p>
+            <p><a href="{% url 'forum:thread_create' %}" class="btn">Створити першу гілку</a></p>
+        </div>
+    {% endif %}
+</body>
+</html>
