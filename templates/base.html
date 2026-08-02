@@ -230,6 +230,115 @@
             background-color: var(--accent-color);
             box-shadow: none;
         }
+
+        /* Lightbox - відкриття фото */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+        }
+        .lightbox-modal img {
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: var(--border-radius-sm);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            transition: transform 0.1s ease-out;
+            cursor: grab;
+        }
+        .lightbox-modal img:active { cursor: grabbing; }
+        
+        .lightbox-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 3rem;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 50%;
+            user-select: none;
+            z-index: 1001;
+        }
+        .lightbox-arrow:hover { background: rgba(255,255,255,0.4); }
+        #prevArrow { left: 20px; }
+        #nextArrow { right: 20px; }
+
+        .lightbox-close {
+            position: absolute;
+            top: 25px;
+            right: 35px;
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: 300;
+            cursor: pointer;
+            z-index: 1002;
+            transition: var(--transition);
+            line-height: 1;
+        }
+        .lightbox-close:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        img[style*="cursor: pointer"] {
+            cursor: zoom-in;
+        }
+
+        /* Global Form Controls Styling */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        input[type="search"],
+        input[type="url"],
+        textarea,
+        select,
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius-sm);
+            border: 1px solid var(--card-border);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        input[type="search"]:focus,
+        input[type="url"]:focus,
+        textarea:focus,
+        select:focus,
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(138, 180, 248, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
@@ -271,6 +380,87 @@
             htmlElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        });
+    </script>
+    <!-- Lightbox Modal -->
+    <div class="lightbox-modal" id="lightboxModal">
+        <div id="lightboxClose" class="lightbox-close">&times;</div>
+        <div id="prevArrow" class="lightbox-arrow">&#10094;</div>
+        <img id="lightboxImg">
+        <div id="nextArrow" class="lightbox-arrow">&#10095;</div>
+    </div>
+
+    <script>
+        // Lightbox functionality
+        const modal = document.getElementById('lightboxModal');
+        const modalImg = document.getElementById('lightboxImg');
+        const prevArrow = document.getElementById('prevArrow');
+        const nextArrow = document.getElementById('nextArrow');
+        const closeBtn = document.getElementById('lightboxClose');
+        
+        let currentImages = [];
+        let currentIndex = 0;
+        let scale = 1;
+
+        function updateModalImage() {
+            scale = 1; // Скидаємо зум при перемиканні
+            modalImg.style.transform = `scale(${scale})`;
+            modalImg.src = currentImages[currentIndex].src;
+            prevArrow.style.display = currentIndex === 0 ? 'none' : 'block';
+            nextArrow.style.display = currentIndex === currentImages.length - 1 ? 'none' : 'block';
+        }
+
+        // Зум на коліщатко
+        modalImg.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomSpeed = 0.1;
+            if (e.deltaY < 0) scale += zoomSpeed; // Зум вгору
+            else scale -= zoomSpeed; // Зум вниз
+            
+            scale = Math.min(Math.max(scale, 1), 4); // Обмеження зуму від 1x до 4x
+            modalImg.style.transform = `scale(${scale})`;
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'IMG' && (e.target.closest('.post-wrapper') || e.target.closest('.card'))) {
+                const parent = e.target.closest('.post-wrapper') || e.target.closest('.card');
+                currentImages = Array.from(parent.querySelectorAll('img'));
+                currentIndex = currentImages.indexOf(e.target);
+                
+                modal.style.display = 'flex';
+                updateModalImage();
+            }
+        });
+
+        prevArrow.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateModalImage();
+            }
+        });
+
+        nextArrow.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentIndex < currentImages.length - 1) {
+                currentIndex++;
+                updateModalImage();
+            }
+        });
+
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            modal.style.display = 'none';
+        });
+
+        modal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') modal.style.display = 'none';
+            if (e.key === 'ArrowLeft' && currentIndex > 0) { currentIndex--; updateModalImage(); }
+            if (e.key === 'ArrowRight' && currentIndex < currentImages.length - 1) { currentIndex++; updateModalImage(); }
         });
     </script>
     {% block extra_js %}{% endblock %}

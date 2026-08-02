@@ -9,15 +9,28 @@
 </div>
 
 <div class="card" style="max-width: 600px; margin: 0 auto;">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div style="margin-bottom: 1.5rem;">
-            <label for="{{ form.title.id_for_label }}" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Назва теми</label>
-            {{ form.title }}
-            {{ form.title.errors }}
+        
+        {% for field in form %}
+            <div style="margin-bottom: 1.5rem;">
+                <label for="{{ field.id_for_label }}" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div style="color: #ff5252; margin-top: 0.25rem; font-size: 0.85rem;">{{ field.errors.0 }}</div>
+                {% endif %}
+                {% if field.help_text %}
+                    <div style="color: var(--text-secondary); margin-top: 0.25rem; font-size: 0.8rem;">
+                        {{ field.help_text|safe }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <button type="submit" class="btn">Створити тему</button>
+            <a href="{% url 'forum:thread_list' %}" class="btn btn--outline">Скасувати</a>
         </div>
-        <button type="submit" class="btn">Створити тему</button>
-        <a href="{% url 'forum:thread_list' %}" class="btn btn--outline" style="margin-left: 1rem;">Скасувати</a>
     </form>
 </div>
 {% endblock %}
