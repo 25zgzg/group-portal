@@ -143,6 +143,18 @@ def get_new_posts(request, thread_pk):
     return JsonResponse({'html': html, 'last_post_id': last_id})
 
 @login_required
+def get_new_threads(request):
+    last_thread_id = request.GET.get('last_thread_id', 0)
+    # Отримуємо теми, ID яких більший за last_thread_id
+    new_threads = Thread.objects.filter(pk__gt=last_thread_id).order_by('-created_at')
+    
+    html = ""
+    for thread in new_threads:
+        html += render_to_string('forum/includes/thread_card.html', {'thread': thread}, request=request)
+    
+    return JsonResponse({'html': html})
+
+@login_required
 def toggle_follow(request, author_pk):
     author = get_object_or_404(User, pk=author_pk)
     if author == request.user:

@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     ThreadListView, ThreadDetailView, ThreadCreateView, 
-    PostCreateView, PostUpdateView, vote_post, toggle_follow, get_new_posts
+    PostCreateView, PostUpdateView, vote_post, toggle_follow, get_new_posts, get_new_threads
 )
 
 app_name = 'forum'
@@ -15,5 +15,6 @@ urlpatterns = [
     path('post/<int:post_pk>/vote/', vote_post, name='vote_post'),
     path('follow/<int:author_pk>/', toggle_follow, name='toggle_follow'),
     path('<int:thread_pk>/new-posts/', get_new_posts, name='get_new_posts'),
+    path('new-threads/', get_new_threads, name='get_new_threads'),
 ]
 
