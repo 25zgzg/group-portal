@@ -1,0 +1,42 @@
+<div class="post-wrapper" data-post-id="{{ post.pk }}" style="background: var(--bg-color); padding: 1.25rem; border-radius: var(--border-radius-sm); margin-bottom: 1rem; border: 1px solid var(--card-border);">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+        <span><strong>{{ post.author.username }}</strong></span>
+        <span>{{ post.created_at|date:"d.m.Y H:i" }}</span>
+    </div>
+    <p class="card__text">{{ post.content }}</p>
+    
+    {% if post.images.all %}
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem;">
+        {% for img in post.images.all %}
+            {% if img.is_main %}
+                <img src="{{ img.image.url }}" style="max-width: 300px; width: 100%; border-radius: var(--border-radius-sm); border: 2px solid var(--primary-color);">
+            {% else %}
+                <img src="{{ img.image.url }}" style="max-width: 100px; width: 100px; height: 100px; object-fit: cover; border-radius: var(--border-radius-sm); opacity: 0.8;">
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div style="display: flex; gap: 10px; align-items: center; margin-top: 1rem;">
+        <form action="{% url 'forum:vote_post' post.pk %}" method="post" class="vote-form" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="value" value="1">
+            <button type="submit" class="btn btn--outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">👍 Лайк (<span class="likes-count">{{ post.likes_count }}</span>)</button>
+        </form>
+        <form action="{% url 'forum:vote_post' post.pk %}" method="post" class="vote-form" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="value" value="-1">
+            <button type="submit" class="btn btn--outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">👎 Дизлайк (<span class="dislikes-count">{{ post.dislikes_count }}</span>)</button>
+        </form>
+
+        {% if user.is_authenticated %}
+            {% if user == post.author %}
+                <a href="{% url 'forum:post_update' post.pk %}" class="btn btn--outline" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">Редагувати</a>
+            {% else %}
+                <a href="{% url 'forum:toggle_follow' post.author.pk %}" class="btn btn--outline" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; margin-left: auto;">
+                    Слідкувати за автором
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

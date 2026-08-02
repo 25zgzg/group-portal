@@ -12,57 +12,19 @@
 <div class="card">
     <h2 class="card__title" style="font-size: 1.1rem; margin-bottom: 1rem;">Повідомлення та гілка обговорення</h2>
     
-    {% for post in thread.posts.all %}
-    <div class="post-wrapper" style="background: var(--bg-color); padding: 1.25rem; border-radius: var(--border-radius-sm); margin-bottom: 1rem; border: 1px solid var(--card-border);">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
-            <span><strong>{{ post.author.username }}</strong></span>
-            <span>{{ post.created_at|date:"d.m.Y H:i" }}</span>
-        </div>
-        <p class="card__text">{{ post.content }}</p>
-        
-        <!-- Зображення: головне та мініатюри -->
-        {% if post.images.all %}
-        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem;">
-            {% for img in post.images.all %}
-                {% if img.is_main %}
-                    <img src="{{ img.image.url }}" style="max-width: 300px; width: 100%; border-radius: var(--border-radius-sm); border: 2px solid var(--primary-color);">
-                {% else %}
-                    <img src="{{ img.image.url }}" style="max-width: 100px; width: 100px; height: 100px; object-fit: cover; border-radius: var(--border-radius-sm); opacity: 0.8;">
-                {% endif %}
-            {% endfor %}
-        </div>
-        {% endif %}
-        
-        <div style="display: flex; gap: 10px; align-items: center; margin-top: 1rem;">
-            <!-- Лайки / Дизлайки -->
-            <form action="{% url 'forum:vote_post' post.pk %}" method="post" class="vote-form" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="value" value="1">
-                <button type="submit" class="btn btn--outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">👍 Лайк (<span class="likes-count">{{ post.likes_count }}</span>)</button>
-            </form>
-            <form action="{% url 'forum:vote_post' post.pk %}" method="post" class="vote-form" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="value" value="-1">
-                <button type="submit" class="btn btn--outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">👎 Дизлайк (<span class="dislikes-count">{{ post.dislikes_count }}</span>)</button>
-            </form>
-
-            <!-- Кнопка підписки на автора -->
-            {% if user.is_authenticated and user != post.author %}
-            <a href="{% url 'forum:toggle_follow' post.author.pk %}" class="btn btn--outline" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; margin-left: auto;">
-                Слідкувати за автором
-            </a>
-            {% endif %}
-        </div>
+    <div id="posts-container">
+        {% for post in thread.posts.all %}
+            {% include 'forum/includes/post.html' with post=post %}
+        {% empty %}
+            <p class="card__text" id="no-posts-msg">У цій темі поки немає повідомлень.</p>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p class="card__text">У цій темі поки немає повідомлень.</p>
-    {% endfor %}
 </div>
 
 {% if user.is_authenticated %}
 <div class="card" style="margin-top: 2rem;">
     <h3 class="card__title">Написати відповідь</h3>
-    <form method="post" action="{% url 'forum:post_create' thread.pk %}" enctype="multipart/form-data">
+    <form id="postForm" method="post" action="{% url 'forum:post_create' thread.pk %}" enctype="multipart/form-data">
         {% csrf_token %}
         
         {% for field in post_form %}
@@ -83,8 +45,36 @@
 
 {% block extra_js %}
 <script>
-document.querySelectorAll('.vote-form').forEach(form => {
-    form.addEventListener('submit', function(e) {
+// Делегування подій: слухаємо лайки на рівні всього контейнера
+document.getElementById('posts-container').addEventListener('submit', function(e) {
+    const form = e.target.closest('.vote-form');
+    if (form) {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const parent = form.closest('.post-wrapper');
+            parent.querySelector('.likes-count').textContent = `👍 Лайк (${data.likes_count})`;
+            parent.querySelector('.dislikes-count').textContent = `👎 Дизлайк (${data.dislikes_count})`;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+});
+
+// AJAX надсилання нових постів (без перезавантаження)
+const postForm = document.getElementById('postForm');
+if (postForm) {
+    postForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
         const formData = new FormData(this);
@@ -99,12 +89,39 @@ document.querySelectorAll('.vote-form').forEach(form => {
         })
         .then(response => response.json())
         .then(data => {
-            const parent = this.closest('.post-wrapper');
-            parent.querySelector('.likes-count').textContent = data.likes_count;
-            parent.querySelector('.dislikes-count').textContent = data.dislikes_count;
+            if (data.html) {
+                const postsContainer = document.getElementById('posts-container');
+                const noPostsMsg = document.getElementById('no-posts-msg');
+                if (noPostsMsg) {
+                    noPostsMsg.remove();
+                }
+                postsContainer.insertAdjacentHTML('beforeend', data.html);
+                postForm.reset();
+            }
         })
         .catch(error => console.error('Error:', error));
     });
-});
+}
+
+// Автоматичне опитування сервера кожну секунду
+setInterval(() => {
+    // Знаходимо ID останнього поста, який вже є на сторінці
+    const posts = document.querySelectorAll('.post-wrapper');
+    const lastPostId = posts.length > 0 ? posts[posts.length - 1].dataset.postId : 0;
+
+    fetch(`{% url 'forum:get_new_posts' thread.pk %}?last_post_id=${lastPostId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.html) {
+                const postsContainer = document.getElementById('posts-container');
+                const noPostsMsg = document.getElementById('no-posts-msg');
+                if (noPostsMsg) {
+                    noPostsMsg.remove();
+                }
+                postsContainer.insertAdjacentHTML('beforeend', data.html);
+            }
+        })
+        .catch(error => console.error('Error fetching new posts:', error));
+}, 1000); // 1000 мс = 1 секунда
 </script>
 {% endblock %}

@@ -398,14 +398,18 @@
         const nextArrow = document.getElementById('nextArrow');
         const closeBtn = document.getElementById('lightboxClose');
         
-        let currentImages = [];
+        let currentImages = []; // Може містити об'єкти {src: '...'} або DOM-елементи
         let currentIndex = 0;
         let scale = 1;
 
         function updateModalImage() {
             scale = 1; // Скидаємо зум при перемиканні
             modalImg.style.transform = `scale(${scale})`;
-            modalImg.src = currentImages[currentIndex].src;
+            
+            // Уніфікований доступ до src
+            const imgSrc = currentImages[currentIndex].src || currentImages[currentIndex];
+            modalImg.src = imgSrc;
+            
             prevArrow.style.display = currentIndex === 0 ? 'none' : 'block';
             nextArrow.style.display = currentIndex === currentImages.length - 1 ? 'none' : 'block';
         }
@@ -422,13 +426,40 @@
         });
 
         document.addEventListener('click', function(e) {
+            // Обробка кліку на зображення
             if (e.target.tagName === 'IMG' && (e.target.closest('.post-wrapper') || e.target.closest('.card'))) {
-                const parent = e.target.closest('.post-wrapper') || e.target.closest('.card');
-                currentImages = Array.from(parent.querySelectorAll('img'));
-                currentIndex = currentImages.indexOf(e.target);
+                const container = e.target.closest('[data-all-images]') || e.target.closest('.post-wrapper') || e.target.closest('.card');
+                
+                if (container.dataset.allImages) {
+                    // Якщо є повний список URL у JSON
+                    const allUrls = JSON.parse(container.dataset.allImages);
+                    currentImages = allUrls.map(url => ({ src: url }));
+                    
+                    // Шукаємо індекс по поточному src
+                    const clickedSrc = e.target.src;
+                    currentIndex = allUrls.findIndex(url => clickedSrc.includes(url));
+                    if (currentIndex === -1) currentIndex = 0;
+                } else {
+                    // Стара логіка (якщо немає data-all-images)
+                    currentImages = Array.from(container.querySelectorAll('img'));
+                    currentIndex = currentImages.indexOf(e.target);
+                }
                 
                 modal.style.display = 'flex';
                 updateModalImage();
+            }
+            // Обробка кліку на бейдж "+X ще"
+            else if (e.target.classList.contains('more-images-badge')) {
+                const container = e.target.closest('[data-all-images]');
+                if (container) {
+                    const allUrls = JSON.parse(container.dataset.allImages);
+                    currentImages = allUrls.map(url => ({ src: url }));
+                    // Починаємо з 4-ї картинки (індекс 3)
+                    currentIndex = 3; 
+                    
+                    modal.style.display = 'flex';
+                    updateModalImage();
+                }
             }
         });
 
