@@ -1,0 +1,11 @@
+feat: add automatic thread polling on thread list (35s interval)
+
+[EN]
+- Add get_new_threads view and URL to fetch newly created threads dynamically.
+- Create thread_card.html template partial for rendering individual thread cards.
+- Add client-side polling (every 35 seconds) on thread_list.html to automatically prepend new threads when users stay statically on the page.
+
+[UA]
+- Додано представлення та URL get_new_threads для динамічного завантаження нових тем.
+- Створено шаблонний компонент thread_card.html для карток тем.
+- Налаштовано клієнтське опитування сервера (кожні 35 секунд) на сторінці thread_list.html для автоматичного додавання нових тем, якщо користувач знаходиться на сторінці статично.

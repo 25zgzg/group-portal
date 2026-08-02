@@ -7,10 +7,28 @@
     <h1 class="hero__title">Портал нашої групи</h1>
     <p class="hero__text">Сучасний простір для комунікації, навчання та організації подій. Усі новинні оголошення, форум, щоденник та матеріали в одному інтуїтивному інтерфейсі.</p>
     <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-        <a href="/api/auth/profile/" class="btn">Мій профіль</a>
+        {% if not user.is_authenticated %}
+            <a href="{% url 'accounts:login' %}" class="btn">Увійти</a>
+        {% endif %}
         <a href="/api/" class="btn btn--outline">API Документація</a>
     </div>
 </section>
+
+{% if user.is_authenticated %}
+<section class="card" style="margin-bottom: 2rem; display: flex; align-items: center; gap: 1.5rem;">
+    {% if user.avatar %}
+        <img src="{{ user.avatar }}" alt="{{ user.username }}" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-color);">
+    {% endif %}
+    <div>
+        <h2 class="card__title" style="margin-bottom: 0.25rem;">👤 Мій профіль</h2>
+        <p class="card__text" style="margin-bottom: 0;">
+            <strong>Ім'я користувача:</strong> {{ user.username }}<br>
+            <strong>Email:</strong> {{ user.email }}<br>
+            <strong>Роль:</strong> {{ user.get_role_display }}
+        </p>
+    </div>
+</section>
+{% endif %}
 
 <div class="modules-grid">
     <div class="card">

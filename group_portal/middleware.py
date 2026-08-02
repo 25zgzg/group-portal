@@ -15,9 +15,14 @@ class LoginRequiredMiddleware:
             '/api/auth/register/',
         ]
 
-        # Дозволяємо також доступ до адмінки та статичних файлів
+        # Дозволяємо також доступ до адмінки, статичних файлів та всіх маршрутів accounts (allauth тощо)
         if not request.user.is_authenticated:
-            if request.path not in allowed_paths and not request.path.startswith('/admin/') and not request.path.startswith('/static/'):
+            if (
+                request.path not in allowed_paths 
+                and not request.path.startswith('/admin/') 
+                and not request.path.startswith('/static/')
+                and not request.path.startswith('/accounts/')
+            ):
                 print(f"DEBUG: Middleware blocking path: {request.path}")
                 return redirect('accounts:login')
 

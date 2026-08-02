@@ -19,6 +19,7 @@ class User(AbstractUser):
         choices=ROLE_CHOICES,
         default=ROLE_USER
     )
+    avatar = models.URLField(max_length=500, blank=True, null=True, verbose_name="Аватарка")
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]
