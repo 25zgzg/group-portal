@@ -1,11 +1,13 @@
-feat: add automatic thread polling on thread list (35s interval)
+[EN] Enhance Django admin panel with full model registration, inline editing, and custom filters
 
-[EN]
-- Add get_new_threads view and URL to fetch newly created threads dynamically.
-- Create thread_card.html template partial for rendering individual thread cards.
-- Add client-side polling (every 35 seconds) on thread_list.html to automatically prepend new threads when users stay statically on the page.
+- Register all custom models (`User`, `Follow`, `Thread`, `Post`, `PostImage`, `Vote`, `Announcement`, `AnnouncementComment`, `AnnouncementVote`) in respective `admin.py` files.
+- Customize `UserAdmin` with custom roles/avatars fieldsets, search fields, filters, and admin actions (make_moderator, make_admin).
+- Add `PostInline` and custom annotations (`posts_count`) in `ThreadAdmin`.
+- Implement `list_editable` for announcements and optimized search/filters across all admin modules.
 
-[UA]
-- Додано представлення та URL get_new_threads для динамічного завантаження нових тем.
-- Створено шаблонний компонент thread_card.html для карток тем.
-- Налаштовано клієнтське опитування сервера (кожні 35 секунд) на сторінці thread_list.html для автоматичного додавання нових тем, якщо користувач знаходиться на сторінці статично.
+[UA] Покращення адмін-панелі Django: реєстрація всіх моделей, inline-редагування та кастомні фільтри
+
+- Зареєстровано всі кастомні моделі (`User`, `Follow`, `Thread`, `Post`, `PostImage`, `Vote`, `Announcement`, `AnnouncementComment`, `AnnouncementVote`) у відповідних файлах `admin.py`.
+- Налаштовано `UserAdmin` із додаванням полів ролей та аватарок, розширеним пошуком, фільтрами та кастомними діями (make_moderator, make_admin).
+- Додано `PostInline` та анотації кількості постів (`posts_count`) у `ThreadAdmin`.
+- Реалізовано `list_editable` для оголошень та оптимізовано пошук і фільтри у всіх модулях адмінки.
