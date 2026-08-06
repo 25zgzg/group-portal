@@ -33,10 +33,16 @@ class Post(models.Model):
         verbose_name="Автор"
     )
     content = models.TextField(verbose_name="Зміст повідомлення")
-    likes_count = models.PositiveIntegerField(default=0, verbose_name="Кількість лайків")
-    dislikes_count = models.PositiveIntegerField(default=0, verbose_name="Кількість дизлайків")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата відправки")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата редагування")
+
+    @property
+    def likes_count(self):
+        return self.votes.filter(value=1).count()
+
+    @property
+    def dislikes_count(self):
+        return self.votes.filter(value=-1).count()
 
     class Meta:
         verbose_name = "Повідомлення"

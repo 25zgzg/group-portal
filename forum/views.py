@@ -17,6 +17,9 @@ class ThreadListView(ListView):
     template_name = 'forum/thread_list.html'
     context_object_name = 'threads'
 
+    def get_queryset(self):
+        return Thread.objects.select_related('creator').prefetch_related('posts')
+
 class ThreadDetailView(DetailView):
     model = Thread
     template_name = 'forum/thread_detail.html'
@@ -114,11 +117,6 @@ def vote_post(request, post_pk):
             else:
                 vote.value = value
                 vote.save()
-        
-        # Перераховуємо лічильники
-        post.likes_count = post.votes.filter(value=1).count()
-        post.dislikes_count = post.votes.filter(value=-1).count()
-        post.save()
         
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse({

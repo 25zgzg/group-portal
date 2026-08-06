@@ -4,32 +4,38 @@ from django.contrib.auth.decorators import login_required
 from .models import Announcement, AnnouncementComment, AnnouncementVote
 from .forms import AnnouncementCommentForm
 
+from django.db.models import Count, Q
+
 class AnnouncementListView(ListView):
     model = Announcement
     template_name = 'announcements/announcement_list.html'
     context_object_name = 'announcements'
 
-    def get_context_data(f_self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Додаємо підрахунок голосів та кількість коментарів для кожного оголошення
-        for ann in context['announcements']:
-            ann.likes_count = ann.votes.filter(value=1).count()
-            ann.dislikes_count = ann.votes.filter(value=-1).count()
-            ann.comments_count = ann.comments.count()
-        return context
+    def get_queryset(self):
+        return Announcement.objects.annotate(
+            likes_count=Count('votes', filter=Q(votes__value=1)),
+            dislikes_count=Count('votes', filter=Q(votes__value=-1)),
+            comments_count=Count('comments')
+        )
 
 class AnnouncementDetailView(DetailView):
     model = Announcement
     template_name = 'announcements/announcement_detail.html'
     context_object_name = 'announcement'
 
+    def get_queryset(self):
+        return Announcement.objects.annotate(
+            likes_count=Count('votes', filter=Q(votes__value=1)),
+            dislikes_count=Count('votes', filter=Q(votes__value=-1))
+        )
+
     def get_context_data(f_self, **kwargs):
         context = super().get_context_data(**kwargs)
         announcement = f_self.get_object()
         context['comment_form'] = AnnouncementCommentForm()
         context['comments'] = announcement.comments.select_related('author').all()
-        context['likes_count'] = announcement.votes.filter(value=1).count()
-        context['dislikes_count'] = announcement.votes.filter(value=-1).count()
+        context['likes_count'] = announcement.likes_count
+        context['dislikes_count'] = announcement.dislikes_count
         
         if f_self.request.user.is_authenticated:
             user_vote = announcement.votes.filter(user=f_self.request.user).first()
