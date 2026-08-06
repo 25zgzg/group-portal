@@ -23,7 +23,6 @@ class LoginRequiredMiddleware:
                 and not request.path.startswith('/static/')
                 and not request.path.startswith('/accounts/')
             ):
-                print(f"DEBUG: Middleware blocking path: {request.path}")
                 return redirect('accounts:login')
 
         response = self.get_response(request)

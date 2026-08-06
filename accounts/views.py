@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth import login
 from django.shortcuts import redirect
+from django.utils.http import url_has_allowed_host_and_scheme
 from .forms import WebRegisterForm, EmailAuthenticationForm
 
 class WebLoginView(DjangoLoginView):
@@ -16,7 +17,7 @@ class WebLoginView(DjangoLoginView):
 
     def get_success_url(self):
         next_url = self.request.GET.get('next') or self.request.POST.get('next')
-        if next_url:
+        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={self.request.get_host()}):
             return next_url
         return reverse_lazy('home')
 
@@ -34,7 +35,7 @@ class RegisterView(CreateView):
         user = form.save()
         login(self.request, user)
         next_url = self.request.GET.get('next') or self.request.POST.get('next')
-        if next_url:
+        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={self.request.get_host()}):
             return redirect(next_url)
         return super().form_valid(form)
 
