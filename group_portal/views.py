@@ -28,7 +28,8 @@ def home_api_view(request):
         ],
         "endpoints": {
             "auth_register": "/api/auth/register/",
-            "auth_login": "/api/auth/login/",
+            "auth_login": "/api/auth/api/login/",
+            "auth_refresh": "/api/auth/refresh/",
             "auth_profile": "/api/auth/profile/"
         }
     })

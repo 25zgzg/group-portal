@@ -23,3 +23,24 @@ FUNCTION: is_auto_signup_allowed, auto_signup: True
 FUNCTION: process_auto_signup, auto_signup: True
 FUNCTION: process_auto_signup, result: True
 FUNCTION: save_user, user.pk: None, username: nazar20111212
+FUNCTION: is_auto_signup_allowed, auto_signup: True
+FUNCTION: process_auto_signup, auto_signup: True
+FUNCTION: process_auto_signup, result: True
+FUNCTION: save_user, user.pk: None, username: 
+FUNCTION: populate_user, username: None, email: nazar20111212@gmail.com
+FUNCTION: populate_user, username: None, email: xzcxc7421lkgfhhf@gmail.com
+FUNCTION: is_auto_signup_allowed, auto_signup: True
+FUNCTION: process_auto_signup, auto_signup: True
+FUNCTION: redirect_to_signup
+FUNCTION: populate_user, username: None, email: 9845uijhds@gmail.com
+FUNCTION: is_auto_signup_allowed, auto_signup: True
+FUNCTION: process_auto_signup, auto_signup: True
+FUNCTION: process_auto_signup, result: True
+FUNCTION: save_user, user.pk: None, username: 9845uijhds
+FUNCTION: populate_user, username: None, email: nazar20111212@gmail.com
+FUNCTION: populate_user, username: None, email: xzcxc7421lkgfhhf@gmail.com
+FUNCTION: is_auto_signup_allowed, auto_signup: True
+FUNCTION: process_auto_signup, auto_signup: True
+FUNCTION: redirect_to_signup
+FUNCTION: populate_user, username: None, email: 9845uijhds@gmail.com
+FUNCTION: populate_user, username: None, email: 9845uijhds@gmail.com

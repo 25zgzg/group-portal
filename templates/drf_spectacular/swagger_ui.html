@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if title %}{{ title }}{% else %}API Документація — Портал Групи{% endif %}</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ swagger_ui_css }}">
+    <link rel="icon" type="image/png" href="{{ swagger_ui_favicon_rel }}"/>
+    <style>
+        .custom-top-bar {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .custom-top-bar a {
+            color: #8ab4f8;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background-color: rgba(138, 180, 248, 0.1);
+            transition: all 0.2s;
+        }
+        .custom-top-bar a:hover {
+            background-color: rgba(138, 180, 248, 0.2);
+        }
+    </style>
+</head>
+<body>
+<div class="custom-top-bar">
+    <a href="/">← На головну порталу</a>
+    <span style="font-size: 0.9rem; opacity: 0.8;">Портал Групи — API Документація</span>
+</div>
+<div id="swagger-ui"></div>
+<script src="{{ swagger_ui_bundle_js }}"></script>
+<script src="{{ swagger_ui_preset_js }}"></script>
+<script>
+window.onload = function() {
+  const ui = SwaggerUIBundle({
+    url: "{% url 'schema' %}",
+    dom_id: '#swagger-ui',
+    presets: [
+      SwaggerUIBundle.presets.apis,
+      SwaggerUIStandalonePreset
+    ],
+    layout: "StandaloneLayout",
+  });
+  window.ui = ui;
+}
+</script>
+</body>
+</html>
