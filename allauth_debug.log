@@ -18,3 +18,8 @@ FUNCTION: populate_user, username: None, email: nazar20111212@gmail.com
 FUNCTION: is_auto_signup_allowed, auto_signup: True
 FUNCTION: process_auto_signup, auto_signup: True
 FUNCTION: redirect_to_signup
+FUNCTION: populate_user, username: None, email: nazar20111212@gmail.com
+FUNCTION: is_auto_signup_allowed, auto_signup: True
+FUNCTION: process_auto_signup, auto_signup: True
+FUNCTION: process_auto_signup, result: True
+FUNCTION: save_user, user.pk: None, username: nazar20111212

@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'materials',
     'portfolio',
     'gallery',
+    'moderation',
 ]
 
 SITE_ID = 1

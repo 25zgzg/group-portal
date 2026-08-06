@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Панель модерації{% endblock %}
+
+{% block content %}
+<h1>Панель модерації</h1>
+
+<h2>Останні теми форуму</h2>
+<ul>
+    {% for thread in threads %}
+        <li>
+            {{ thread.title }} (Автор: {{ thread.creator }})
+            <form action="{% url 'moderation:delete_thread' thread.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" onclick="return confirm('Ви впевнені?')">Видалити</button>
+            </form>
+        </li>
+    {% empty %}
+        <li>Теми відсутні.</li>
+    {% endfor %}
+</ul>
+
+<h2>Останні оголошення</h2>
+<ul>
+    {% for announcement in announcements %}
+        <li>
+            {{ announcement.title }} (Автор: {{ announcement.author }})
+            <form action="{% url 'moderation:delete_announcement' announcement.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" onclick="return confirm('Ви впевнені?')">Видалити</button>
+            </form>
+        </li>
+    {% empty %}
+        <li>Оголошення відсутні.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -350,6 +350,12 @@
                 <ul class="header__nav-list">
                     <li><a href="/" class="header__nav-link">Головна</a></li>
                     {% if user.is_authenticated %}
+                        {% if user.is_moderator or user.is_administrator or user.is_superuser %}
+                            <li><a href="/moderation/" class="header__nav-link" style="color: var(--primary-color);">Панель модерації</a></li>
+                        {% endif %}
+                        {% if user.is_superuser %}
+                            <li><a href="/admin/" class="header__nav-link" style="color: red;">Технічна адмінка</a></li>
+                        {% endif %}
                         <li><span class="header__nav-link" style="color: var(--primary-color);">{{ user.username }}</span></li>
                     {% else %}
                         <li><a href="{% url 'accounts:login' %}" class="header__nav-link" style="padding: 0.35rem 0.85rem; font-size: 0.9rem; background-color: var(--primary-color); color: var(--btn-text); border-radius: var(--border-radius-sm);">Увійти</a></li>
